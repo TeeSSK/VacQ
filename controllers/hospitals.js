@@ -1,3 +1,5 @@
+const Hospital = require('../models/Hospital')
+
 // @desc Get all hospitals
 // @route GET /api/v1/hospitals
 // @access Public
@@ -17,8 +19,11 @@ exports.getHospital = (req, res, next) => {
 // @desc create new hospital
 // @route POST /api/v1/hospitals
 // @access Private
-exports.createHospital = (req, res, next) => {
-  res.status(200).json({ success: true, msg: 'Create new hospitals' })
+exports.createHospital = async (req, res, next) => {
+  const hospital = await Hospital.create(req.body)
+  res
+    .status(201)
+    .json({ success: true, msg: 'Create new hospitals', data: hospital })
 }
 
 // @desc Update hospital
