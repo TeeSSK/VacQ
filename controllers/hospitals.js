@@ -62,13 +62,11 @@ exports.updateHospital = async (req, res, next) => {
       return res.status(400).json({ success: false })
     }
 
-    res
-      .status(200)
-      .json({
-        success: true,
-        msg: `Update hospital ${req.params.id}`,
-        data: hospital,
-      })
+    res.status(200).json({
+      success: true,
+      msg: `Update hospital ${req.params.id}`,
+      data: hospital,
+    })
   } catch (err) {
     res.status(400).json({ success: false })
   }
@@ -77,8 +75,16 @@ exports.updateHospital = async (req, res, next) => {
 // @desc delete hospital
 // @route DELETE /api/v1/hospitals/:id
 // @access Private
-exports.deleteHospital = (req, res, next) => {
-  res
-    .status(200)
-    .json({ success: true, msg: `Delete hospital ${req.params.id}` })
+exports.deleteHospital = async (req, res, next) => {
+  try {
+    const hospital = await Hospital.findByIdAndDelete(req.params.id)
+
+    if (!hospital) {
+      return res.status(400).json({ success: false })
+    }
+
+    res.status(200).json({ success: true, data: {} })
+  } catch (err) {
+    res.status(400).json({ success: false })
+  }
 }
