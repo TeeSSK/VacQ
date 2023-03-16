@@ -2,3 +2,18 @@
 node_modules/*
 #ignore config.env
 config/config.env
+
+# npm
+package-lock.json
+*.log
+*.gz
+
+# Coveralls
+.nyc_output
+coverage
+
+# Benchmarking
+benchmarks/graphs
+
+# ignore additional files using core.excludesFile
+# https://git-scm.com/docs/gitignore
