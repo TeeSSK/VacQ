@@ -35,15 +35,19 @@ exports.addAppointment = async (req, res, next) => {
 // @access Public
 exports.getAppointments = async (req, res, next) => {
   let query
+  let hospitalId = req.params.hospitalId
 
   // General users can see only their appointments!
   if (req.user.role !== 'admin') {
-    query = Appointment.find({ user: req.user.id }).populate({
+    query = Appointment.find({
+      user: req.user.id,
+      hospital: hospitalId,
+    }).populate({
       path: 'hospital',
       select: 'name province tel',
     })
   } else {
-    query = Appointment.find().populate({
+    query = Appointment.find({ hospital: hospitalId }).populate({
       path: 'hospital',
       select: 'name province tel',
     })
@@ -92,7 +96,6 @@ exports.getAppointment = async (req, res, next) => {
 // @desc Update appointment
 // @route PUT /api/v1/appointments/:id
 // @access Private
-
 exports.updateAppointment = async (req, res, next) => {
   try {
     let appointment = await Appointment.findById(req.params.id)
