@@ -1,4 +1,34 @@
 const Appointment = require('../models/Appointment')
+const Hospital = require('../models/Hospital')
+
+// @desc Add appointment
+// @route POST /api/v1/hospitals/:hospitalId/appointment
+// @access Private
+exports.addAppointment = async (req, res, next) => {
+  try {
+    req.body.hospital = req.params.hospitalId
+
+    const hospital = await Hospital.findById(req.params.hospitalId)
+
+    if (!hospital) {
+      return res.status(404).json({
+        success: false,
+        message: `No hospital with the if of ${req.params.hospitalId}`,
+      })
+    }
+
+    const appointment = await Appointment.create(req.body)
+    res.status(200).json({
+      success: true,
+      data: appointment,
+    })
+  } catch (error) {
+    console.log(error)
+    res
+      .status(400)
+      .json({ success: false, message: 'Cannot create Appointment' })
+  }
+}
 
 // @desc Get all appointments
 // @route GET /api/v1/appointments
@@ -44,12 +74,10 @@ exports.getAppointment = async (req, res, next) => {
     })
 
     if (!appointment) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          message: `No appointment with the if of ${req.params.id}`,
-        })
+      return res.status(404).json({
+        success: false,
+        message: `No appointment with the if of ${req.params.id}`,
+      })
     }
 
     res.status(200).json({ success: true, data: appointment })
