@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const dotenv = require('dotenv')
 const mongoSanitize = require('express-mongo-sanitize')
+const helmet = require('helmet')
 const cookieParser = require('cookie-parser')
 const connectDB = require('./config/db')
 
@@ -25,6 +26,7 @@ app.use(express.json())
 // Cookie parser
 app.use(cookieParser())
 app.use(mongoSanitize())
+app.use(helmet())
 
 app.use('/api/v1/hospitals', hospitals)
 app.use('/api/v1/auth', auth)
