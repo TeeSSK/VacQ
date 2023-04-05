@@ -17,6 +17,11 @@ const sendTokenResponse = (user, statusCode, res) => {
   }
   res.status(statusCode).cookie('token', token, options).json({
     success: true,
+    // add for frontend
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    //end for frontend
     token,
   })
 }
@@ -84,4 +89,16 @@ exports.login = async (req, res, next) => {
 exports.getMe = async (req, res, next) => {
   const user = await User.findById(req.user.id)
   res.status(200).json({ success: true, data: user })
+}
+
+// @desc Log user out / clear cookie
+// @route GET /api/v1/auth/logout
+// @access Private
+exports.logout = async (req, res, next) => {
+  res.cookie('token', 'none', {
+    expire: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+  })
+
+  res.status(200).json({ success: true, data: {} })
 }
