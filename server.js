@@ -5,6 +5,7 @@ const mongoSanitize = require('express-mongo-sanitize')
 const helmet = require('helmet')
 const xss = require('xss-clean')
 const rateLimit = require('express-rate-limit')
+const hpp = require('hpp')
 const cookieParser = require('cookie-parser')
 const connectDB = require('./config/db')
 
@@ -36,6 +37,7 @@ const limiter = rateLimit({
   windowsMs: 10 * 60 * 1000, // 10 mins
   max: 100,
 })
+app.use(hpp())
 
 app.use(limiter)
 
